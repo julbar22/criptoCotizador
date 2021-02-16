@@ -31,7 +31,6 @@ const Formulario = ({ updateDatosForm, updateError }) => {
     useEffect(() => {
         const consultaCriptos = async () => {
             const respuesta = await axios.get('https://min-api.cryptocompare.com/data/top/mktcapfull?limit=10&tsym=USD');
-            console.log(respuesta.data)
             updateCripto(respuesta.data.Data);
         }
 
@@ -72,6 +71,8 @@ const Formulario = ({ updateDatosForm, updateError }) => {
 }
 
 Formulario.propTypes = {
+    updateDatosForm: PropTypes.func.isRequired,
+    updateError: PropTypes.func.isRequired
 
 }
 

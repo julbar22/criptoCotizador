@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import PropTypes from 'prop-types';
 
 const LABEL = styled.p`
     background-color: #b7322c;
@@ -17,6 +18,10 @@ const Error = ({ label }) => {
     return (
         <LABEL>{label}</LABEL>
     )
+}
+
+Error.propTypes={
+    label: PropTypes.string.isRequired
 }
 
 export default Error
