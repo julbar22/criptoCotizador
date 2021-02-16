@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from "@emotion/styled";
 import imagen from './cryptomonedas.png';
 import Formulario from "./components/Formulario";
+import Error from "./components/Error";
 
 const Contenedor = styled.div`
   max-width:900px;
@@ -36,6 +37,9 @@ const Heading = styled.h1`
 }
 `;
 function App() {
+
+  const [error, updateError] = useState(false);
+  const [datosForm, updateDatosForm] = useState({ 'moneda': '', 'cripto': '' })
   return (
     <Contenedor>
       <div>
@@ -44,7 +48,8 @@ function App() {
       </div>
       <div>
         <Heading>Cotiza Criptomonedas al instante</Heading>
-        <Formulario />
+        {error ? <Error label="Los campos son obligatorios"></Error> : null}
+        <Formulario updateError={updateError} updateDatosForm={updateDatosForm} />
       </div>
     </Contenedor>
   );

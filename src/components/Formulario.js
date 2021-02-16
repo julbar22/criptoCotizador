@@ -23,9 +23,9 @@ const Boton = styled.button`
     }
 `;
 
-const Formulario = () => {
+const Formulario = ({ updateDatosForm, updateError }) => {
 
-    const [datosCripto,updateCripto]= useState([]);
+    const [datosCripto, updateCripto] = useState([]);
 
 
     useEffect(() => {
@@ -50,8 +50,20 @@ const Formulario = () => {
 
     const [criptoSeleccionada, CriptoBody] = useCriptomoneda('Elige la Criptomoneda', '', datosCripto);
 
+    const enviarDatos = (e) => {
+        e.preventDefault();
+        if (monedaSeleccionada === '' || criptoSeleccionada === '') {
+            updateError(true);
+            return;
+        }
+        updateError(false);
+        updateDatosForm({
+            'moneda': monedaSeleccionada,
+            'cripto': criptoSeleccionada
+        });
+    }
     return (
-        <form>
+        <form onSubmit={enviarDatos}>
             <SelectBody></SelectBody>
             <CriptoBody></CriptoBody>
             <Boton type="submit">Calcular</Boton>
