@@ -1,8 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from "@emotion/styled";
 import imagen from './cryptomonedas.png';
 import Formulario from "./components/Formulario";
 import Error from "./components/Error";
+import Cotizacion from "./components/Cotizacion";
+import axios from 'axios';
+import Spinner from './components/Spinner';
 
 const Contenedor = styled.div`
   max-width:900px;
@@ -39,7 +42,28 @@ const Heading = styled.h1`
 function App() {
 
   const [error, updateError] = useState(false);
-  const [datosForm, updateDatosForm] = useState({ 'moneda': '', 'cripto': '' })
+  const [datosForm, updateDatosForm] = useState({ 'moneda': '', 'cripto': '' });
+  const [resultadoCotizacion, updateResultado] = useState({})
+  const [loading, updateLoading] = useState(false);
+
+  useEffect(() => {
+    const cotizar = async () => {
+      if (datosForm.moneda === '')
+        return;
+      updateLoading(true);
+      const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${datosForm.cripto}&tsyms=${datosForm.moneda}`;
+      const resultado = await axios.get(url);
+      setTimeout(() => {
+        updateResultado(resultado.data.DISPLAY[datosForm.cripto][datosForm.moneda]);
+        updateLoading(false);
+      }, 3000);
+
+    }
+    cotizar()
+
+
+  }, [datosForm])
+
   return (
     <Contenedor>
       <div>
@@ -50,6 +74,7 @@ function App() {
         <Heading>Cotiza Criptomonedas al instante</Heading>
         {error ? <Error label="Los campos son obligatorios"></Error> : null}
         <Formulario updateError={updateError} updateDatosForm={updateDatosForm} />
+        {!error ? !loading ? <Cotizacion resultado={resultadoCotizacion}></Cotizacion> : <Spinner></Spinner> : null}
       </div>
     </Contenedor>
   );
